@@ -1,0 +1,394 @@
+/* ======================================
+   Star Signal - battle.css グラフィカルUI版
+   ====================================== */
+
+:root {
+  --bg-1: #050814;
+  --bg-2: #0a1230;
+  --panel: rgba(8, 16, 34, 0.82);
+  --panel-2: rgba(14, 24, 52, 0.92);
+  --line: rgba(255,255,255,0.12);
+  --text: #eef4ff;
+  --muted: #9eb2d8;
+  --gold: #ffd54f;
+  --hp-1: #f5436c;
+  --hp-2: #ff9a68;
+  --gauge-1: #4f83ff;
+  --gauge-2: #9fc7ff;
+  --btn-1: #486aff;
+  --btn-2: #7a7cff;
+  --btn-3: #2eb778;
+  --btn-4: #cf49ff;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top, rgba(80,105,210,0.18), transparent 38%),
+    radial-gradient(circle at bottom, rgba(31,86,180,0.16), transparent 28%),
+    linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+}
+
+#battle-screen {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(150px, 1.7fr) minmax(100px, 1fr) minmax(135px, 1fr) minmax(92px, .85fr);
+  gap: 8px;
+  height: 100dvh;
+  width: 100%;
+  padding: 10px;
+  overflow: hidden;
+}
+
+/* ===== Enemy ===== */
+#enemy-area,
+#party-area,
+#command-area,
+#log {
+  min-height: 0;
+}
+
+#enemy-area {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(12,20,46,0.78), rgba(9,16,34,0.92));
+  box-shadow: 0 10px 26px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow: hidden;
+}
+
+.enemy-wrap {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  align-items: center;
+  justify-items: center;
+  padding: 10px 14px 12px;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,0.04), transparent 46%),
+    linear-gradient(180deg, rgba(70,95,190,0.08), transparent 45%);
+}
+
+.enemy-name {
+  font-size: clamp(16px, 2.4vw, 22px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.38);
+}
+
+.enemy-image {
+  width: min(122px, 20vw);
+  height: min(122px, 20vw);
+  min-width: 84px;
+  min-height: 84px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.14), transparent 26%),
+    radial-gradient(circle at center, rgba(255,80,110,0.16), transparent 54%),
+    linear-gradient(180deg, rgba(88,22,38,.9), rgba(44,11,19,.95));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  color: #ffe7ee;
+  box-shadow: inset 0 0 28px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,.28);
+}
+
+.enemy-bar,
+.hp-bar,
+.gauge-bar {
+  width: min(100%, 700px);
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.enemy-bar,
+.hp-bar {
+  height: 11px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
+}
+
+.gauge-bar {
+  height: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.05);
+  margin-top: 4px;
+}
+
+.hp-fill,
+.gauge-fill {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.hp-fill {
+  background: linear-gradient(90deg, var(--hp-1), var(--hp-2));
+  box-shadow: 0 0 14px rgba(255,92,114,0.28);
+}
+
+.gauge-fill {
+  background: linear-gradient(90deg, var(--gauge-1), var(--gauge-2));
+  box-shadow: 0 0 14px rgba(79,131,255,0.24);
+}
+
+.enemy-hp-text {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Party ===== */
+#party-area {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.character {
+  min-width: 0;
+  padding: 8px 8px 7px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(18,29,64,0.9), rgba(8,15,32,0.96));
+  box-shadow: 0 8px 20px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.04);
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  gap: 4px;
+  transform: translateZ(0);
+}
+
+.character.guard {
+  box-shadow: 0 0 0 2px rgba(46,183,120,0.55), 0 8px 18px rgba(0,0,0,.24);
+}
+
+.character.down {
+  opacity: .45;
+  filter: grayscale(.35);
+}
+
+.character.active {
+  border: 2px solid yellow;
+  box-shadow: 0 0 0 3px rgba(255,230,70,.16), 0 8px 18px rgba(0,0,0,.32);
+}
+
+.char-name {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff9da;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-text {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+/* ===== Commands ===== */
+#command-area {
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(11,18,40,0.82), rgba(8,14,30,0.94));
+  box-shadow: 0 10px 26px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,.04);
+  overflow: hidden;
+}
+
+.battle-buttons-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+#command-area button,
+.skill-btn,
+.result-buttons button {
+  appearance: none;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: white;
+  cursor: pointer;
+  transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+  touch-action: manipulation;
+}
+
+#command-area button:hover,
+.skill-btn:hover,
+.result-buttons button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+#command-area button:disabled,
+.skill-btn:disabled,
+.result-buttons button:disabled {
+  opacity: .38;
+  transform: none;
+  filter: none;
+  cursor: default;
+}
+
+#battle-attack-btn { background: linear-gradient(135deg, #4668ff, #717bff); }
+#battle-skill-btn { background: linear-gradient(135deg, #2f72ff, #4fb3ff); }
+#battle-defense-btn { background: linear-gradient(135deg, #1f9563, #3ac17f); }
+#battle-special-btn { background: linear-gradient(135deg, #842dff, #d04bff); }
+
+.battle-info-row {
+  min-height: 18px;
+  margin-top: 6px;
+  padding: 0 2px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.battle-skill-panel {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.skill-btn {
+  min-width: 0;
+  text-align: left;
+  background: linear-gradient(180deg, rgba(63,84,155,.88), rgba(28,39,75,.98));
+  border: 1px solid rgba(255,255,255,.08);
+  display: grid;
+  gap: 2px;
+  align-content: center;
+}
+
+.skill-btn span,
+.skill-desc {
+  display: block;
+}
+
+.skill-desc {
+  font-size: 10px;
+  font-weight: 600;
+  color: #d9e4ff;
+  opacity: .9;
+  line-height: 1.25;
+}
+
+.battle-result-panel {
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(12,20,48,.95), rgba(8,14,28,.98));
+}
+
+.result-title {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-align: center;
+}
+
+.result-text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.result-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.result-buttons button:first-child { background: linear-gradient(135deg, #3e6dff, #7a7cff); }
+.result-buttons button:last-child { background: linear-gradient(135deg, #4e5468, #858ca3); }
+
+/* ===== Log ===== */
+#log {
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(9,13,24,0.92), rgba(6,10,18,0.98));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+  overflow-y: auto;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #dfe9ff;
+}
+
+#log::-webkit-scrollbar { width: 8px; }
+#log::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.18);
+  border-radius: 999px;
+}
+
+/* ===== Mobile tuning ===== */
+@media (max-width: 768px) {
+  #battle-screen {
+    grid-template-rows: minmax(138px, 1.6fr) minmax(104px, 1fr) minmax(148px, 1.05fr) minmax(88px, .75fr);
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .enemy-name { font-size: 16px; }
+  .enemy-image {
+    width: 92px;
+    height: 92px;
+    border-radius: 20px;
+  }
+
+  #party-area { gap: 6px; }
+  .character {
+    padding: 7px 6px 6px;
+    border-radius: 14px;
+  }
+  .char-name { font-size: 12px; }
+  .mini-text { font-size: 9px; }
+
+  .battle-buttons-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #command-area button,
+  .skill-btn,
+  .result-buttons button {
+    min-height: 38px;
+    font-size: 11px;
+    padding: 7px 6px;
+  }
+
+  .battle-skill-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .battle-info-row {
+    font-size: 10px;
+  }
+}
