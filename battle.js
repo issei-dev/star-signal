@@ -215,12 +215,29 @@ function updateCommandState() {
 }
 
 function render() {
-  els.turn.textContent = state.turn;
-  els.phase.textContent = state.phase.toUpperCase();
-  updateEnemyPanel();
-  renderParty();
-  renderSkills();
-  updateCommandState();
+  const pArea = document.getElementById('party-area');
+  pArea.innerHTML = '';
+
+  party.forEach(c => {
+    pArea.innerHTML += `
+      <div class="character">
+        ${c.name}<br>
+        
+        <div class="hp-bar">
+          <div class="hp-fill" style="width:${c.hp}%"></div>
+        </div>
+
+        <div class="gauge" style="width:${c.gauge || 0}%"></div>
+      </div>
+    `;
+  });
+
+  document.getElementById('enemy-area').innerHTML = `
+    <div class="enemy">${enemy.name}</div>
+    <div class="hp-bar">
+      <div class="hp-fill" style="width:${enemy.hp}%"></div>
+    </div>
+  `;
 }
 
 function computeDamage(attacker, defender, multiplier = 1) {
